@@ -5,12 +5,10 @@ exports.registerSchema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
   password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
-  confirmPassword: Joi.ref("password").required(),
+  confirmPassword: Joi.string().required().valid(Joi.ref("password")).strip(),
 });
 
 exports.loginSchema = Joi.object({
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
+  emailOrMobile: Joi.string().required(),
+  password: Joi.string().required(),
 });

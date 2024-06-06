@@ -1,5 +1,5 @@
 --Register 
-post /auth/Register
+post /auth/register
 body
     email
     password
