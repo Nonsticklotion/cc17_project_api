@@ -1,0 +1,158 @@
+--Register 
+post /auth/Register
+body
+    email
+    password
+    confirmpassword
+
+--login
+post /auth/login
+body 
+    email
+    password
+response 200 accessToken
+
+--get authenticated user
+get /auth/me
+header 
+     authorization bearer access_token
+response 
+    200 user
+    400 message
+    401 message
+    500 message
+-------------------------------------------------------------------------------------
+--get/user/address
+header 
+   authorization Beaerer access_token
+response
+
+--create firstname lastname  address
+post /user/address
+header 
+   authorization Beaerer access_token
+response
+
+--edit address
+patch /user/address
+header 
+   authorization Beaerer access_token
+response
+-------------------------------------------------------------------------------------
+--user get order
+get /user/order
+header 
+   authorization Beaerer access_token
+response
+
+--create order
+post /user/order
+header 
+   authorization Beaerer access_token
+response
+
+--delete order
+delete /user/order/:orderId
+header 
+   authorization Beaerer access_token
+response
+req.params
+
+--create comment and star
+post /user/:productId
+header 
+   authorization Beaerer access_token
+response
+
+--upload image for paid
+post /user/:orderId
+header 
+   authorization Beaerer access_token
+response
+
+--user get product
+get /user/order/:productId
+header 
+   authorization Beaerer access_token
+response
+
+
+----------------------------------------------------------
+
+
+************************************************
+ADMIN PRODUCT
+--get allproduct
+get /admin/product
+
+--get 1 product
+get /admin/product/:productId
+
+--create product
+post /admin/product
+header 
+   authorization Beaerer access_token
+response
+
+--edit product
+patch /admin/product/:productId
+header 
+   authorization Beaerer access_token
+response
+
+--delete product
+delete /admin/product/:productId
+header 
+   authorization Beaerer access_token
+response
+
+
+******************************************************
+ADMIN ORDER
+--admin get order
+get /admin/order
+header 
+   authorization Beaerer access_token
+response
+
+
+--admin edit order
+patch /admin/order/:orderId
+header 
+   authorization Beaerer access_token
+response
+
+
+--admin delete order
+delete /admin/order/:orderId
+header 
+   authorization Beaerer access_token
+response
+
+
+***********************************************************
+ADMIN CETAGORY
+
+--admin get cetagory
+post /admin/cetagory
+header 
+   authorization Beaerer access_token
+response
+
+--admin create cetagory
+post /admin/cetagory
+header 
+   authorization Beaerer access_token
+response
+
+--admin edit cetagory
+patch /admin/cetagory/:categoryId
+header 
+   authorization Beaerer access_token
+response
+
+--admin delete cetagory
+delete /admin/cetagory/:categoryId
+header 
+   authorization Beaerer access_token
+response

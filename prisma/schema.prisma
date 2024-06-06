@@ -1,0 +1,131 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String   @unique
+  phone     Int
+  address   String
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  orders  Order[]
+  reviews Review[]
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  date       String
+  shipmentId Int
+  paymentId  Int
+  totalPrice Int
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  user       User        @relation(fields: [userId], references: [id])
+  shipment   Shipment    @relation(fields: [shipmentId], references: [id])
+  payment    Payment     @relation(fields: [paymentId], references: [id])
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  discount  Int
+  orderId   Int
+  amount    Int
+  productId Int
+  price     Int
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Payment {
+  id         Int           @id @default(autoincrement())
+  status     PaymentStatus
+  paymentPic String
+  orders     Order[]
+}
+
+enum PaymentStatus {
+  SUCCESS
+  PENDING
+  REJECT
+}
+
+model Shipment {
+  id     Int            @id @default(autoincrement())
+  status ShipmentStatus
+  orders Order[]
+}
+
+enum ShipmentStatus {
+  SENT
+  PREPARING
+}
+
+model Product {
+  id         Int      @id @default(autoincrement())
+  bookName   String
+  author     String
+  price      Int
+  categoryId Int
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  category   Category    @relation(fields: [categoryId], references: [id])
+  reviews    Review[]
+  orderItems OrderItem[]
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  category String
+  products Product[]
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  comment   String
+  ratingId  Int
+  userId    Int
+  productId Int
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  rating  Rating  @relation(fields: [ratingId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Rating {
+  id      Int         @id @default(autoincrement())
+  value   RatingValue
+  reviews Review[]
+}
+
+enum RatingValue {
+  ONE
+  TWO
+  THREE
+  FOUR
+  FIVE
+}
