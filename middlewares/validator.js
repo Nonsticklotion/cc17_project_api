@@ -1,4 +1,4 @@
-const { registerSchema } = require("../validator/auth-validator");
+const { registerSchema, loginSchema } = require("../validator/auth-validator");
 
 const validator = {};
 

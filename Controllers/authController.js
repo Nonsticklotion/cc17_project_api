@@ -6,7 +6,8 @@ const authController = {};
 authController.register = async (req, res, next) => {
   try {
     const data = req.input;
-    const existUser = userService.findUserByEmail(data.email);
+    const existUser = await userService.findUserByEmail(data.email);
+    console.log(existUser);
 
     if (existUser) {
       createError({
@@ -14,7 +15,7 @@ authController.register = async (req, res, next) => {
         statusCode: 400,
       });
     }
-    data.password = await hashService(data.password);
+    data.password = await hashService.hash(data.password);
     await userService.createUser(data);
     res.status(200).json({ message: "register successful" });
   } catch (err) {
@@ -24,8 +25,8 @@ authController.register = async (req, res, next) => {
 
 authController.login = async (req, res, next) => {
   try {
-    const existUser = await userService.findUserByEmailOrMobile(
-      req.input.emailOrMobile
+    const existUser = await userService.findUserByEmail(
+      req.input.email
     );
 
     if (!existUser) {
