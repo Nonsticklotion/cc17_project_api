@@ -1,4 +1,5 @@
 const userService = require("../Services/user-service");
+const createError = require("../utils/createError");
 
 const userController = {};
 
@@ -25,5 +26,21 @@ userController.updateAddress = async (req, res, next) => {
     next(err);
   }
 };
+
+userController.createOrder = async (req, res, next) => {
+  try {
+    const userId = req.user.id; // Assuming the user ID is available in the request object
+    const { orderData, orderItemsData } = req.body;
+
+    const result = await userService.createOrder(userId, orderData, orderItemsData);
+    
+    res.status(201).json({ success: true, data: result });
+  } catch (err) {
+    // Handling error, e.g., if order items creation fails, we might need to rollback the created order
+    console.error("Error in creating order: ", err);
+    res.status(500).json({ success: false, message: 'Failed to create order' });
+  }
+};
+
 
 module.exports = userController;

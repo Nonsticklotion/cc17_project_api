@@ -33,8 +33,34 @@ userService.findOrderItemfromOrderId = (orderId) => {
   return prisma.orderItem.findMany({ where: { orderId } });
 };
 
-userService.createOrder = (data) => {
-  return prisma.order.create({ data });
+userService.createOrder = async (userId, orderData, orderItemsData) => {
+  return prisma.$transaction(async (prisma) => {
+    const order = await prisma.order.create({
+      data: {
+        userId: userId,
+        date: orderData.date,
+        shipmentId: orderData.shipmentId,
+        paymentId: orderData.paymentId,
+        totalPrice: orderData.totalPrice,
+      },
+    });
+
+    const orderItems = await Promise.all(
+      orderItemsData.map((item) => {
+        return prisma.orderItem.create({
+          data: {
+            orderId: order.id,
+            discount: item.discount,
+            amount: item.amount,
+            productId: item.productId,
+            price: item.price,
+          },
+        });
+      })
+    );
+
+    return { order, orderItems };
+  });
 };
 
 userService.updatePayment = (paymentPic, paymentId) => {

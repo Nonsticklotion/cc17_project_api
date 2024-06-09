@@ -6,4 +6,7 @@ const userRouter = express.Router();
 
 
 userRouter.patch('/address',authenticate,userController.updateAddress)
+userRouter.post('/order',authenticate,userController.createOrder)
+
+
 module.exports = userRouter;
