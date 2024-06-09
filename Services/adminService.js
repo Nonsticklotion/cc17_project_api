@@ -17,6 +17,19 @@ adminService.findBookNameAndAuthor = (bookName, author) => {
     where: { bookName, author },
   });
 };
+adminService.findProductById = (id) => {
+  return prisma.product.findUnique({
+    where: { id },
+  });
+};
+adminService.updateProduct = (id, data) => {
+  return prisma.product.update({
+    where: { id },
+    data: data,
+  });
+};
+
+
 ////////////////////////////////Category/////////////////////////////
 adminService.findCategory = (category) => {
   return prisma.category.findFirst({ where: { category } });

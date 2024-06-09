@@ -82,4 +82,31 @@ adminController.createProduct = async (req, res, next) => {
   }
 };
 
+adminController.updateProductDetails = async (req, res, next) => {
+  try {
+    const { id, stock, price } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: "ID is required" });
+    }
+
+    const data = {};
+    if (stock != null) {
+      data.stock = stock;
+    }
+    if (price != null) {
+      data.price = price;
+    }
+
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ error: "At least one field (stock or price) is required" });
+    }
+
+    const result = await adminService.updateProduct(id, data);
+    res.status(200).json({ message: "Product updated successfully", data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = adminController;
