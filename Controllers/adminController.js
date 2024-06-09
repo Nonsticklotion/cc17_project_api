@@ -46,4 +46,22 @@ adminController.getCategory = async (req, res, next) => {
     next(err);
   }
 };
+
+adminController.deleteCategory = async (req, res, next) => {
+  try {
+    const { category } = req.query;
+    const findCategory = await adminService.findCategory(category);
+    if (!findCategory) {
+      createError({
+        message: "no caategory in database",
+        statusCode: 400,
+      });
+    }
+    console.log(findCategory);
+    const result = await adminService.deleteCategory(findCategory.id);
+    res.status(200).json({ message: "delete success", data: result });
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = adminController;
