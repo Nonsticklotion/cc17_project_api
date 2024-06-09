@@ -33,7 +33,7 @@ model Order {
   id         Int      @id @default(autoincrement())
   userId     Int
   date       String
-  shipmentId Int       @default(2)
+  shipmentId Int      @default(2)
   paymentId  Int
   totalPrice Int
   createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
@@ -89,6 +89,7 @@ model Product {
   author     String
   price      Int
   categoryId Int
+  stock      Int
   createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
 
@@ -119,7 +120,7 @@ model Review {
 
 model Rating {
   id      Int         @id @default(autoincrement())
-  value   RatingValue 
+  value   RatingValue
   reviews Review[]
 }
 
