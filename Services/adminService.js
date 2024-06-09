@@ -28,7 +28,11 @@ adminService.updateProduct = (id, data) => {
     data: data,
   });
 };
-
+adminService.deleteProduct = (productId) => {
+  return prisma.product.delete({
+    where: { id: productId },
+  });
+};
 
 ////////////////////////////////Category/////////////////////////////
 adminService.findCategory = (category) => {

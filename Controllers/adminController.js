@@ -99,14 +99,27 @@ adminController.updateProductDetails = async (req, res, next) => {
     }
 
     if (Object.keys(data).length === 0) {
-      return res.status(400).json({ error: "At least one field (stock or price) is required" });
+      return res
+        .status(400)
+        .json({ error: "At least one field (stock or price) is required" });
     }
 
     const result = await adminService.updateProduct(id, data);
-    res.status(200).json({ message: "Product updated successfully", data: result });
+    res
+      .status(200)
+      .json({ message: "Product updated successfully", data: result });
   } catch (err) {
     next(err);
   }
 };
 
+adminController.deleteProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await adminService.deleteProduct(+id);
+    res.status(200).json({ message: "finish delete", data: result });
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = adminController;
