@@ -9,7 +9,8 @@ adminRouter.patch(
   authenticate,
   adminController.updateProductDetails
 );
-adminRouter.delete("/product/:id",authenticate,adminController.deleteProduct)
+adminRouter.get("/product", authenticate, adminController.getAllProduct);
+adminRouter.delete("/product/:id", authenticate, adminController.deleteProduct);
 adminRouter.post("/category", authenticate, adminController.createCategory);
 adminRouter.get("/category", authenticate, adminController.getCategory);
 adminRouter.delete("/category", authenticate, adminController.deleteCategory);

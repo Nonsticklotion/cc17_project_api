@@ -122,4 +122,12 @@ adminController.deleteProduct = async (req, res, next) => {
     next(err);
   }
 };
+adminController.getAllProduct = async (req, res, next) => {
+  try {
+    const result = await adminService.getAllProduct();
+    res.status(200).json({ message: "get all product", data: result });
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = adminController;

@@ -34,6 +34,9 @@ adminService.deleteProduct = (productId) => {
   });
 };
 
+adminService.getAllProduct = () => {
+  return prisma.product.findMany();
+};
 ////////////////////////////////Category/////////////////////////////
 adminService.findCategory = (category) => {
   return prisma.category.findFirst({ where: { category } });
