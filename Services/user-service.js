@@ -18,8 +18,11 @@ userService.findUserById = (userId) => {
   });
 };
 
-userService.updateUserInfo = (userInfo, userId) => {
-  return prisma.user.update({ where: { id: userId }, data: userInfo });
+userService.updateUserInfo = (userInfo, userId, email) => {
+  return prisma.user.update({
+    where: { id: userId },
+    data: userInfo,
+  });
 };
 
 userService.findOrderfromUserId = (userId) => {
@@ -58,7 +61,6 @@ userService.addReview = (reviewData) => {
   return prisma.review.create({ data: reviewData });
 };
 
-
 userService.updateReview = (reviewId, reviewData) => {
   return prisma.review.update({
     where: { id: reviewId },
@@ -66,18 +68,15 @@ userService.updateReview = (reviewId, reviewData) => {
   });
 };
 
-
 userService.deleteReview = (reviewId) => {
   return prisma.review.delete({
     where: { id: reviewId },
   });
 };
 
-
 userService.addRating = (ratingData) => {
   return prisma.rating.create({ data: ratingData });
 };
-
 
 userService.updateRating = (ratingId, ratingData) => {
   return prisma.rating.update({
@@ -85,7 +84,6 @@ userService.updateRating = (ratingId, ratingData) => {
     data: ratingData,
   });
 };
-
 
 userService.deleteRating = (ratingId) => {
   return prisma.rating.delete({
