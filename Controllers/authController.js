@@ -1,4 +1,5 @@
 const hashService = require("../Services/hashService");
+const jwtService = require("../Services/jwtService");
 const userService = require("../Services/user-service");
 const createError = require("../utils/createError");
 const authController = {};
@@ -25,9 +26,7 @@ authController.register = async (req, res, next) => {
 
 authController.login = async (req, res, next) => {
   try {
-    const existUser = await userService.findUserByEmail(
-      req.input.email
-    );
+    const existUser = await userService.findUserByEmail(req.input.email);
 
     if (!existUser) {
       createError({
@@ -55,4 +54,7 @@ authController.login = async (req, res, next) => {
   }
 };
 
+authController.getMe = (req, res, next) => {
+  res.status(200).json({ user: req.user });
+};
 module.exports = authController;

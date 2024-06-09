@@ -1,3 +1,7 @@
+const jwtService = require("../Services/jwtService");
+const userService = require("../Services/user-service");
+const createError = require("../utils/createError");
+
 const authenticate = async (req, res, next) => {
   try {
     const authorization = req.headers.authorization;
@@ -9,7 +13,7 @@ const authenticate = async (req, res, next) => {
     }
     const accessToken = authorization.split(" ")[1];
     const payload = jwtService.verify(accessToken);
-
+    console.log(payload);
     const user = await userService.findUserById(payload.id);
     if (!user) {
       createError({
@@ -20,9 +24,10 @@ const authenticate = async (req, res, next) => {
     delete user.password;
 
     req.user = user;
+    next();
   } catch (err) {
     next(err);
   }
 };
 
-module.exports = authenticate
+module.exports = authenticate;
