@@ -115,8 +115,8 @@ adminController.updateProductDetails = async (req, res, next) => {
 
 adminController.deleteProduct = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await adminService.deleteProduct(+id);
+    const { productId } = req.params;
+    const result = await adminService.deleteProduct(+productId);
     res.status(200).json({ message: "finish delete", data: result });
   } catch (err) {
     next(err);
@@ -126,6 +126,23 @@ adminController.getAllProduct = async (req, res, next) => {
   try {
     const result = await adminService.getAllProduct();
     res.status(200).json({ message: "get all product", data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+adminController.getOneProduct = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const product = await adminService.getProductFromProductId(
+      parseInt(productId)
+    );
+    if (!product) {
+      createError({
+        message: "cant find product",
+        statusCode: 400,
+      });
+    }
+    res.status(200).json({ data: product });
   } catch (err) {
     next(err);
   }

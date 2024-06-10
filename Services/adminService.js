@@ -40,6 +40,18 @@ adminService.getAllProduct = () => {
   return prisma.product.findMany();
 };
 
+adminService.getProductFromProductId = (productId) => {
+  return prisma.product.findUnique({
+    where: { id: productId },
+    include: {
+      category: {
+        select: {
+          category: true,
+        },
+      },
+    },
+  });
+};
 /////////////////////////////////////Order///////////////////////////////////
 adminService.updatePaymentStatus = (paymentId, newStatus) => {
   return prisma.payment.update({

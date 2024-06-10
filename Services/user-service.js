@@ -117,6 +117,12 @@ userService.findPaymentById = (paymentId) => {
   });
 };
 
+userService.updatePaymentPicById = (paymentId, paymentPic) => {
+  return prisma.payment.update({
+    where: { id: paymentId },
+    data: { paymentPic: paymentPic },
+  });
+};
 ////////////////////Review///////////////////////////////
 
 userService.getAllReviewFromProductId = (productId) => {
@@ -154,4 +160,22 @@ userService.findReviewFromUserId = (userId) => {
   return prisma.review.findMany({ where: { userId } });
 };
 
+/////////////////////////Product/////////////////////
+
+userService.getProductFromProductId = (productId) => {
+  return prisma.product.findUnique({
+    where: { id: productId },
+    include: {
+      category: {
+        select: {
+          category: true,
+        },
+      },
+    },
+  });
+};
+
+userService.getAllProduct = () => {
+  return prisma.product.findMany();
+};
 module.exports = userService;

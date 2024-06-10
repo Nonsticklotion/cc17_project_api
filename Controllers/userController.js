@@ -1,5 +1,7 @@
+const uploadService = require("../Services/uploadService");
 const userService = require("../Services/user-service");
 const createError = require("../utils/createError");
+const fs = require("fs").promises;
 
 const userController = {};
 
@@ -192,4 +194,56 @@ userController.getUserAddress = async (req, res, next) => {
   }
 };
 
+userController.getProductFromId = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const product = await userService.getProductFromProductId(
+      parseInt(productId)
+    );
+    if (!product) {
+      createError({
+        message: "cant find product",
+        statusCode: 400,
+      });
+    }
+    res.status(200).json({ data: product });
+  } catch (err) {
+    next(err);
+  }
+};
+
+userController.getAllProduct = async (req, res, next) => {
+  try {
+    const result = await userService.getAllProduct();
+    res.status(200).json({ message: "get all product", data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+userController.updatePaymentPic = async (req, res, next) => {
+  try {
+    const { paymentId } = req.body;
+
+    if (!paymentId) {
+      throw createError(400, "Payment ID is required");
+    }
+
+    if (!req.file) {
+      throw createError(400, "Payment picture is required");
+    }
+
+    const paymentPicUrl = await uploadService.upload(req.file.path);
+
+    await userService.updatePaymentPicById(+paymentId, paymentPicUrl);
+
+    res.status(200).json({ paymentPic: paymentPicUrl });
+  } catch (err) {
+    next(err);
+  } finally {
+    if (req.file) {
+      await fs.unlink(req.file.path);
+    }
+  }
+};
 module.exports = userController;
