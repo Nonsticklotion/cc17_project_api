@@ -143,4 +143,17 @@ userController.createReview = async (req, res, next) => {
   }
 };
 
+userController.deleteReview = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const { productId } = req.params;
+    if (!productId) {
+      createError({ message: "need productId", statusCode: 400 });
+    }
+    const deleteData = await userService.deleteReview(id, +productId);
+    res.status(200).json({ message: "delete data complete", data: deleteData });
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = userController;

@@ -11,5 +11,9 @@ userRouter.delete(
   userController.deleteOrderAndAssociations
 );
 userRouter.post("/review", authenticate, userController.createReview);
-// userRouter.delete("/review",authenticate,userController.)
+userRouter.delete(
+  "/review/:productId",
+  authenticate,
+  userController.deleteReview
+);
 module.exports = userRouter;
