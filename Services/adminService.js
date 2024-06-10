@@ -65,6 +65,19 @@ adminService.getOrderFromId = (orderId) => {
 adminService.getAllOrder = () => {
   return prisma.order.findMany();
 };
+
+adminService.getUserAddressFromOrder = (orderId) => {
+  return prisma.order.findUnique({
+    where: { id: orderId },
+    include: {
+      user: {
+        select: {
+          address: true,
+        },
+      },
+    },
+  });
+};
 adminService.getAllOrderItemById = (orderId) => {
   return prisma.orderItem.findMany({ where: { orderId: parseInt(orderId) } });
 };

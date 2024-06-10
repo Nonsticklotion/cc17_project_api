@@ -3,6 +3,7 @@ const authenticate = require("../middlewares/authenticate");
 const userController = require("../Controllers/userController");
 const userRouter = express.Router();
 
+userRouter.get("/address", authenticate, userController.getUserAddress);
 userRouter.patch("/address", authenticate, userController.updateAddress);
 userRouter.post("/order", authenticate, userController.createOrder);
 userRouter.delete(
@@ -16,4 +17,10 @@ userRouter.delete(
   authenticate,
   userController.deleteReview
 );
+userRouter.get(
+  "/review/:productId",
+  authenticate,
+  userController.getReviewFromProductId
+);
+
 module.exports = userRouter;

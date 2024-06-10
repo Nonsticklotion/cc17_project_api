@@ -25,6 +25,11 @@ adminRouter.get(
   authenticate,
   adminController.getAllOrderItem
 );
+adminRouter.get(
+  "/order/:orderId",
+  authenticate,
+  adminController.getOrderandAddressFromOrderId
+);
 adminRouter.get("/product", authenticate, adminController.getAllProduct);
 adminRouter.delete("/product/:id", authenticate, adminController.deleteProduct);
 adminRouter.post("/category", authenticate, adminController.createCategory);

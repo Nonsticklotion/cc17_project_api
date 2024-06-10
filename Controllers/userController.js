@@ -156,4 +156,24 @@ userController.deleteReview = async (req, res, next) => {
     next(err);
   }
 };
+userController.getReviewFromProductId = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const result = await userService.getAllReviewFromProductId(+productId);
+    res.status(200).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+userController.getUserAddress = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const finduserInfo = await userService.getUserInfo(id);
+    res.status(200).json({ message: "your info", data: finduserInfo });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = userController;

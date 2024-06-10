@@ -18,7 +18,10 @@ userService.findUserById = (userId) => {
   });
 };
 
-userService.updateUserInfo = (userInfo, userId, email) => {
+userService.getUserInfo = (userId) => {
+  return prisma.user.findUnique({ where: { id: userId } });
+};
+userService.updateUserInfo = (userInfo, userId) => {
   return prisma.user.update({
     where: { id: userId },
     data: userInfo,
@@ -98,10 +101,10 @@ userService.findPaymentById = (paymentId) => {
 };
 
 ////////////////////Review///////////////////////////////
-userService.addReview = (reviewData) => {
-  return prisma.review.create({ data: reviewData });
-};
 
+userService.getAllReviewFromProductId = (productId) => {
+  return prisma.review.findMany({ where: { productId } });
+};
 userService.updateReview = (reviewId, reviewData) => {
   return prisma.review.update({
     where: { id: reviewId },
@@ -109,11 +112,11 @@ userService.updateReview = (reviewId, reviewData) => {
   });
 };
 
-userService.deleteReview = (reviewId) => {
-  return prisma.review.delete({
-    where: { id: reviewId },
-  });
-};
+// userService.deleteReview = (reviewId) => {
+//   return prisma.review.delete({
+//     where: { id: reviewId },
+//   });
+// };
 
 userService.addReview = (reviewData) => {
   return prisma.review.create({
@@ -122,7 +125,7 @@ userService.addReview = (reviewData) => {
 };
 
 userService.deleteReview = (userId, productId) => {
-  return prisma.review.deleteMany({
+  return prisma.review.delete({
     where: {
       userId: userId,
       productId: productId,

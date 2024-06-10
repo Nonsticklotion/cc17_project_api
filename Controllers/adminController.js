@@ -182,13 +182,25 @@ adminController.getAllOrder = async (req, res, next) => {
   }
 };
 
+adminController.getOrderandAddressFromOrderId = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+
+    const orderWithAddress = await adminService.getUserAddressFromOrder(
+      +orderId
+    );
+    res.status(200).json({ orderWithAddress });
+  } catch (err) {
+    next(err);
+  }
+};
 adminController.getAllOrderItem = async (req, res, next) => {
   try {
     const { orderId } = req.params;
     const allOrderItem = await adminService.getAllOrderItemById(orderId);
     if (!allOrderItem || allOrderItem.length === 0) {
       createError({
-        message: "where is allOrderItem ? Icant see it in database ",
+        message: "where is allOrderItem ? I cant see it in database ",
       });
     }
     res.status(200).json({ data: allOrderItem });
