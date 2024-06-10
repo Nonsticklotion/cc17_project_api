@@ -11,6 +11,7 @@ userRouter.delete(
   authenticate,
   userController.deleteOrderAndAssociations
 );
+userRouter.get("/order",authenticate,userController.getMyOrder)
 userRouter.post("/review", authenticate, userController.createReview);
 userRouter.delete(
   "/review/:productId",

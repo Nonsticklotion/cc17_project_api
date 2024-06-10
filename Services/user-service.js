@@ -44,8 +44,25 @@ userService.findOrderfromId = (orderId) => {
     include: { payment: true, shipment: true, orderItems: true },
   });
 };
+userService.getOrder = (userId) => {
+  return prisma.order.findMany({
+    where: { userId: userId },
+    include: {
+      user: {
+        select: {
+          address: true,
+        },
+      },
+      payment: {
+        select: {
+          paymentPic: true,
+        },
+      },
+    },
+  });
+};
 
-userService.createOrder = async (data) => {
+userService.createOrder = (data) => {
   return prisma.order.create({ data });
 };
 

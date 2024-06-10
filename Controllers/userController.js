@@ -27,6 +27,22 @@ userController.updateAddress = async (req, res, next) => {
   }
 };
 
+userController.getMyOrder = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const orders = await userService.getOrder(id);
+    if (!orders || orders.length === 0) {
+      createError({
+        message: "cant find your order or no your order in database",
+        statusCode: 400,
+      });
+    }
+    res.status(200).json({ data: orders });
+  } catch (err) {
+    next(err);
+  }
+};
+
 userController.createOrder = async (req, res, next) => {
   try {
     const userId = req.user.id;
