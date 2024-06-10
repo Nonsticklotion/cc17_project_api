@@ -114,5 +114,33 @@ userController.deleteOrderAndAssociations = async (req, res, next) => {
   }
 };
 
+userController.createReview = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const { productId, ratingId, comment } = req.body;
+    if (!productId || !ratingId || !comment) {
+      createError({
+        message: "please fill all field",
+        statusCode: 400,
+      });
+    }
+    const findUserReview = await userService.findReviewFromUserId(id);
+    const foundproductId = findUserReview.find(
+      (el) => (el.productId = productId)
+    );
+    if (foundproductId) {
+      createError({
+        message:
+          "found your comment pls delete the comment before comment new one",
+        statusCode: 400,
+      });
+    }
+    const data = { productId, ratingId, comment, userId: id };
+    const result = await userService.addReview(data);
+    res.status(200).json({ message: "finish create review", data: result });
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports = userController;

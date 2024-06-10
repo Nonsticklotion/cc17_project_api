@@ -115,21 +115,20 @@ userService.deleteReview = (reviewId) => {
   });
 };
 
-userService.addRating = (ratingData) => {
-  return prisma.rating.create({ data: ratingData });
-};
-
-userService.updateRating = (ratingId, ratingData) => {
-  return prisma.rating.update({
-    where: { id: ratingId },
-    data: ratingData,
+userService.addReview = async (reviewData) => {
+  return prisma.review.create({
+    data: reviewData,
   });
 };
 
 userService.deleteRating = (ratingId) => {
-  return prisma.rating.delete({
+  return prisma.review.delete({
     where: { id: ratingId },
   });
+};
+
+userService.findReviewFromUserId = (userId) => {
+  return prisma.review.findMany({ where: { userId } });
 };
 
 module.exports = userService;

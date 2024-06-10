@@ -10,5 +10,6 @@ userRouter.delete(
   authenticate,
   userController.deleteOrderAndAssociations
 );
-
+userRouter.post("/review", authenticate, userController.createReview);
+// userRouter.delete("/review",authenticate,userController.)
 module.exports = userRouter;
