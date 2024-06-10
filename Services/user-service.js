@@ -25,6 +25,8 @@ userService.updateUserInfo = (userInfo, userId, email) => {
   });
 };
 
+////////////////////////Order OrderItem Payment Shipment////////////////////
+
 userService.findOrderfromUserId = (userId) => {
   return prisma.order.findMany({ where: { userId } });
 };
@@ -33,42 +35,33 @@ userService.findOrderItemfromOrderId = (orderId) => {
   return prisma.orderItem.findMany({ where: { orderId } });
 };
 
-userService.createOrder = async (userId, orderData, orderItemsData) => {
-  return prisma.$transaction(async (prisma) => {
-    const order = await prisma.order.create({
-      data: {
-        userId: userId,
-        date: orderData.date,
-        shipmentId: orderData.shipmentId,
-        paymentId: orderData.paymentId,
-        totalPrice: orderData.totalPrice,
-      },
-    });
-
-    const orderItems = await Promise.all(
-      orderItemsData.map((item) => {
-        return prisma.orderItem.create({
-          data: {
-            orderId: order.id,
-            discount: item.discount,
-            amount: item.amount,
-            productId: item.productId,
-            price: item.price,
-          },
-        });
-      })
-    );
-
-    return { order, orderItems };
+userService.findOrderfromId = (orderId) => {
+  return prisma.order.findUnique({
+    where: { id: orderId },
+    include: { payment: true, shipment: true, orderItems: true },
   });
+};
+
+userService.createOrder = async (data) => {
+  return prisma.order.create({ data });
+};
+
+userService.createPayment = () => {
+  return prisma.payment.create({ data: { status: "PENDING" } });
 };
 
 userService.updatePayment = (paymentPic, paymentId) => {
   return prisma.payment.update({ where: { id: paymentId }, paymentPic });
 };
 
-userService.createShipment = (shipmentData) => {
-  return prisma.shipment.create({ data: shipmentData });
+userService.deletePayment = (paymentId) => {
+  return prisma.payment.delete({
+    where: { id: paymentId },
+  });
+};
+
+userService.createShipment = () => {
+  return prisma.shipment.create({ data: { status: "PREPARING" } });
 };
 
 userService.updateShipment = (shipmentId, shipmentData) => {
@@ -77,12 +70,34 @@ userService.updateShipment = (shipmentId, shipmentData) => {
     data: shipmentData,
   });
 };
+userService.deleteShipment = (shipmentId) => {
+  return prisma.shipment.delete({
+    where: { id: shipmentId },
+  });
+};
+userService.createOrderItems = (orderItems) => {
+  return prisma.orderItem.createMany({
+    data: orderItems,
+  });
+};
+userService.deleteOrderItems = (orderId) => {
+  return prisma.orderItem.deleteMany({
+    where: { orderId: orderId },
+  });
+};
+userService.deleteOrder = (orderId) => {
+  return prisma.order.delete({
+    where: { id: orderId },
+  });
+};
 
 userService.findPaymentById = (paymentId) => {
   return prisma.payment.findUnique({
     where: { id: paymentId },
   });
 };
+
+////////////////////Review///////////////////////////////
 userService.addReview = (reviewData) => {
   return prisma.review.create({ data: reviewData });
 };

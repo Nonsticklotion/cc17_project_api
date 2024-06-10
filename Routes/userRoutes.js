@@ -3,10 +3,12 @@ const authenticate = require("../middlewares/authenticate");
 const userController = require("../Controllers/userController");
 const userRouter = express.Router();
 
-
-
-userRouter.patch('/address',authenticate,userController.updateAddress)
-userRouter.post('/order',authenticate,userController.createOrder)
-
+userRouter.patch("/address", authenticate, userController.updateAddress);
+userRouter.post("/order", authenticate, userController.createOrder);
+userRouter.delete(
+  "/order/:orderId",
+  authenticate,
+  userController.deleteOrderAndAssociations
+);
 
 module.exports = userRouter;

@@ -130,4 +130,6 @@ adminController.getAllProduct = async (req, res, next) => {
     next(err);
   }
 };
+
+
 module.exports = adminController;

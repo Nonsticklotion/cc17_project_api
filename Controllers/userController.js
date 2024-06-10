@@ -29,18 +29,88 @@ userController.updateAddress = async (req, res, next) => {
 
 userController.createOrder = async (req, res, next) => {
   try {
-    const userId = req.user.id; // Assuming the user ID is available in the request object
-    const { orderData, orderItemsData } = req.body;
+    const userId = req.user.id;
+    const { totalPrice, orderItemsData } = req.body;
 
-    const result = await userService.createOrder(userId, orderData, orderItemsData);
-    
-    res.status(201).json({ success: true, data: result });
+    const newPayment = await userService.createPayment();
+    if (!newPayment) {
+      createError({
+        message: "something wrong with payment",
+        statusCode: 400,
+      });
+    }
+    const newShipment = await userService.createShipment();
+    if (!newShipment) {
+      await userService.deletePayment(newPayment.id);
+      createError({
+        message: "something wrong with shipment",
+        statusCode: 400,
+      });
+    }
+
+    const data = {
+      totalPrice,
+      paymentId: newPayment.id,
+      shipmentId: newShipment.id,
+      userId,
+    };
+
+    const newOrder = await userService.createOrder(data);
+    const orderItems = orderItemsData.map((item) => ({
+      ...item,
+      orderId: newOrder.id,
+    }));
+    await userService.createOrderItems(orderItems);
+
+    res.status(201).json({ success: true, data: newOrder });
   } catch (err) {
-    // Handling error, e.g., if order items creation fails, we might need to rollback the created order
-    console.error("Error in creating order: ", err);
-    res.status(500).json({ success: false, message: 'Failed to create order' });
+    next(err);
   }
 };
 
+userController.deleteOrderAndAssociations = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    // Find the order with its associated paymentId and shipmentId
+    const order = await userService.findOrderfromId(parseInt(orderId));
 
+    if (!order) {
+      createError({
+        message: `Order with id ${orderId} not found`,
+        statusCode: 400,
+      });
+    }
+
+    const deleteOrderItem = await userService.deleteOrderItems(order.id);
+    if (!deleteOrderItem) {
+      createError({ message: `delete orderitem problem`, statusCode: 400 });
+    }
+
+    const deleteOrder = await userService.deleteOrder(order.id);
+    if (!deleteOrder) {
+      createError({ message: `deleteOrder problem`, statusCode: 400 });
+    }
+
+    const deletePayment = await userService.deletePayment(order.paymentId);
+    if (!deletePayment) {
+      createError({ message: `deletePayment problem`, statusCode: 400 });
+    }
+
+    const deleteShipment = await userService.deleteShipment(order.shipmentId);
+    if (!deleteShipment) {
+      createError({ message: `deleteShipment problem`, statusCode: 400 });
+    }
+
+    // await prisma.$transaction([
+    //   prisma.orderItem.deleteMany({ where: { orderId: order.id } }),
+    //   prisma.order.delete({ where: { id: order.id } }),
+    //   prisma.payment.delete({ where: { id: order.paymentId } }),
+    //   prisma.shipment.delete({ where: { id: order.shipmentId } })
+    // ]);
+
+    res.status(200).json({ message: "order has been delete" });
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = userController;

@@ -23,7 +23,7 @@ const authenticate = async (req, res, next) => {
     }
     delete user.password;
 
-    // console.log(user);
+    console.log(user);
     req.user = user;
     next();
   } catch (err) {
