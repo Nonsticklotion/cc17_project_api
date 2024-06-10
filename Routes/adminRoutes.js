@@ -9,6 +9,22 @@ adminRouter.patch(
   authenticate,
   adminController.updateProductDetails
 );
+adminRouter.patch(
+  "/order/payment",
+  authenticate,
+  adminController.updatePayment
+);
+adminRouter.patch(
+  "/order/shipment",
+  authenticate,
+  adminController.updateShipment
+);
+adminRouter.get("/order", authenticate, adminController.getAllOrder);
+adminRouter.get(
+  "/orderItem/:orderId",
+  authenticate,
+  adminController.getAllOrderItem
+);
 adminRouter.get("/product", authenticate, adminController.getAllProduct);
 adminRouter.delete("/product/:id", authenticate, adminController.deleteProduct);
 adminRouter.post("/category", authenticate, adminController.createCategory);

@@ -131,5 +131,69 @@ adminController.getAllProduct = async (req, res, next) => {
   }
 };
 
+adminController.updatePayment = async (req, res, next) => {
+  try {
+    const { orderId, status } = req.body;
+    const order = await adminService.getOrderFromId(orderId);
+    if (!order) {
+      createError({ message: "no order", statusCode: 400 });
+    }
+    const newPaymentStatus = await adminService.updatePaymentStatus(
+      order.paymentId,
+      status
+    );
+    res.status(200).json({
+      message: `Finished updating payment status to ${status}`,
+      data: newPaymentStatus,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
+adminController.updateShipment = async (req, res, next) => {
+  try {
+    const { orderId } = req.body;
+    const order = await adminService.getOrderFromId(orderId);
+    if (!order) {
+      throw createError(404, `Order with id ${orderId} not found`);
+    }
+    const newShipmentStatus = await adminService.updateShipmentStatus(
+      order.shipmentId
+    );
+    res.status(200).json({
+      message: `Finished updating shipment status to sent`,
+      data: newShipmentStatus,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+adminController.getAllOrder = async (req, res, next) => {
+  try {
+    const allOrder = await adminService.getAllOrder();
+    if (!allOrder) {
+      createError({ message: "no order where is order ?", codeStatus: 400 });
+    }
+    res.status(200).json({ data: allOrder });
+  } catch (err) {
+    next(err);
+  }
+};
+
+adminController.getAllOrderItem = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const allOrderItem = await adminService.getAllOrderItemById(orderId);
+    if (!allOrderItem || allOrderItem.length === 0) {
+      createError({
+        message: "where is allOrderItem ? Icant see it in database ",
+      });
+    }
+    res.status(200).json({ data: allOrderItem });
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = adminController;
