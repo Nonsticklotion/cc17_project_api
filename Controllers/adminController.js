@@ -63,12 +63,11 @@ adminController.createProduct = async (req, res, next) => {
         statusCode: 400,
       });
     }
-    const findCategory = await adminService.findCategory(category);
+    let findCategory = await adminService.findCategory(category);
+    console.log(findCategory);
     if (!findCategory) {
-      createError({
-        message: "no caategory in database",
-        statusCode: 400,
-      });
+      const newCategory = await adminService.createCategory(category);
+      findCategory = newCategory;
     }
     if (!req.file) {
       throw createError(400, "Product picture is required");
