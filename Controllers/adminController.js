@@ -1,6 +1,8 @@
 const adminService = require("../Services/adminService");
 const uploadService = require("../Services/uploadService");
 const createError = require("../utils/createError");
+const fs = require("fs");
+const path = require("path");
 
 const adminController = {};
 
@@ -84,6 +86,12 @@ adminController.createProduct = async (req, res, next) => {
       productPicUrl,
       findCategory.id
     );
+
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+      }
+    });
     res.status(201).json({ message: "create success", data: result });
   } catch (err) {
     next(err);
