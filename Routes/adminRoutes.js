@@ -1,9 +1,12 @@
 const express = require("express");
 const authenticate = require("../middlewares/authenticate");
 const adminController = require("../Controllers/adminController");
+const upload = require("../middlewares/upload");
+const { validateUpdatePic } = require("../middlewares/validateUpload");
 const adminRouter = express.Router();
 
-adminRouter.post("/product", authenticate, adminController.createProduct);
+adminRouter.post("/product", authenticate, upload.single("productPic"),
+validateUpdatePic, adminController.createProduct);
 adminRouter.patch(
   "/product",
   authenticate,
@@ -31,8 +34,21 @@ adminRouter.get(
   adminController.getOrderandAddressFromOrderId
 );
 adminRouter.get("/product", authenticate, adminController.getAllProduct);
-adminRouter.get("/product/:productId", authenticate, adminController.getOneProduct);
-adminRouter.delete("/product/:productId", authenticate, adminController.deleteProduct);
+adminRouter.get(
+  "/product/:productId",
+  authenticate,
+  adminController.getOneProduct
+);
+adminRouter.get(
+  "/product/:category",
+  authenticate,
+  adminController.selectProductFromCategory
+);
+adminRouter.delete(
+  "/product/:productId",
+  authenticate,
+  adminController.deleteProduct
+);
 adminRouter.post("/category", authenticate, adminController.createCategory);
 adminRouter.get("/category", authenticate, adminController.getCategory);
 adminRouter.delete("/category", authenticate, adminController.deleteCategory);

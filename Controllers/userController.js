@@ -246,4 +246,31 @@ userController.updatePaymentPic = async (req, res, next) => {
     }
   }
 };
+
+userController.selectProductFromCategory = async (req, res, next) => {
+  try {
+    const { category } = req.params;
+    const findedCategory = await userService.findCategoryIdfromCategory(
+      category
+    );
+    if (!findedCategory) {
+      createError({
+        message: "Can not find this category",
+        statusCode: 400,
+      });
+    }
+    const findedProduct = await userService.getProductFromCategoryId(
+      findedCategory.id
+    );
+    if (!findedProduct) {
+      createError({
+        message: "Can not find this category",
+        statusCode: 400,
+      });
+    }
+    res.status(200).json({ data: findedProduct });
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = userController;

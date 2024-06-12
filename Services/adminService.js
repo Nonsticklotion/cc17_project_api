@@ -37,9 +37,28 @@ adminService.deleteProduct = (productId) => {
 };
 
 adminService.getAllProduct = () => {
-  return prisma.product.findMany();
+  return prisma.product.findMany({
+    include: {
+      category: {
+        select: {
+          category: true,
+        },
+      },
+    },
+  });
 };
 
+adminService.getProductFromCategoryId = (categoryId) => {
+  return prisma.product.findMany({
+    where: { categoryId },
+  });
+};
+
+adminService.findCategoryIdfromCategory = (categoryName) => {
+  return prisma.category.findFirst({
+    where: { category: categoryName },
+  });
+};
 adminService.getProductFromProductId = (productId) => {
   return prisma.product.findUnique({
     where: { id: productId },

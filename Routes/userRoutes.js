@@ -30,7 +30,13 @@ userRouter.patch(
   "/order/paymentpic",
   authenticate,
   upload.single("paymentPic"),
-  validateUpdatePaymentPic,
+  validateUpdatePic,
   userController.updatePaymentPic
+);
+
+userRouter.get(
+  "/product/:category",
+  authenticate,
+  userController.selectProductFromCategory
 );
 module.exports = userRouter;

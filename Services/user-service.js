@@ -134,13 +134,6 @@ userService.updateReview = (reviewId, reviewData) => {
     data: reviewData,
   });
 };
-
-// userService.deleteReview = (reviewId) => {
-//   return prisma.review.delete({
-//     where: { id: reviewId },
-//   });
-// };
-
 userService.addReview = (reviewData) => {
   return prisma.review.create({
     data: reviewData,
@@ -172,6 +165,18 @@ userService.getProductFromProductId = (productId) => {
         },
       },
     },
+  });
+};
+
+userService.getProductFromCategoryId = (categoryId) => {
+  return prisma.product.findMany({
+    where: { categoryId },
+  });
+};
+
+userService.findCategoryIdfromCategory = (categoryName) => {
+  return prisma.category.findFirst({
+    where: { category: categoryName },
   });
 };
 

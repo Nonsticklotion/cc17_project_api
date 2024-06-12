@@ -86,6 +86,7 @@ enum ShipmentStatus {
 model Product {
   id         Int      @id @default(autoincrement())
   bookName   String
+  bookPic    String
   author     String
   price      Int
   categoryId Int
