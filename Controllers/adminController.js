@@ -1,4 +1,5 @@
 const adminService = require("../Services/adminService");
+const uploadService = require("../Services/uploadService");
 const createError = require("../utils/createError");
 
 const adminController = {};
@@ -69,11 +70,19 @@ adminController.createProduct = async (req, res, next) => {
         statusCode: 400,
       });
     }
+    if (!req.file) {
+      throw createError(400, "Product picture is required");
+    }
+
+    const productPicUrl = await uploadService.upload(req.file.path);
+    console.log(req.file.path);
+    console.log(productPicUrl);
     const result = await adminService.createProduct(
       bookName,
       author,
-      price,
-      stock,
+      +price,
+      +stock,
+      productPicUrl,
       findCategory.id
     );
     res.status(201).json({ message: "create success", data: result });

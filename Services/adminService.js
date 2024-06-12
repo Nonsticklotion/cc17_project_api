@@ -3,13 +3,21 @@ const prisma = require("../models/prisma");
 const adminService = {};
 
 ////////////////////////////////Product//////////////////////////////
-adminService.createProduct = (bookName, author, price, stock, categoryId) => {
+adminService.createProduct = (
+  bookName,
+  author,
+  price,
+  stock,
+  productPic,
+  categoryId
+) => {
   return prisma.product.create({
     data: {
       bookName,
       author,
       price,
       stock,
+      bookPic: productPic,
       categoryId,
     },
   });

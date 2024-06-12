@@ -3,7 +3,7 @@ const authenticate = require("../middlewares/authenticate");
 const userController = require("../Controllers/userController");
 const userRouter = express.Router();
 const upload = require("../middlewares/upload");
-const { validateUpdatePaymentPic } = require("../middlewares/validateUpload");
+const { validateUpdatePic } = require("../middlewares/validateUpload");
 
 userRouter.get("/address", authenticate, userController.getUserAddress);
 userRouter.patch("/address", authenticate, userController.updateAddress);
