@@ -6,6 +6,7 @@ const adminService = {};
 adminService.createProduct = (
   bookName,
   author,
+  description,
   price,
   stock,
   productPic,
@@ -16,6 +17,7 @@ adminService.createProduct = (
       bookName,
       author,
       price,
+      description,
       stock,
       bookPic: productPic,
       categoryId,
@@ -52,6 +54,9 @@ adminService.getAllProduct = () => {
           category: true,
         },
       },
+    },
+    orderBy: {
+      createdAt: "desc", // เรียงลำดับจากใหม่ไปเก่า
     },
   });
 };
@@ -101,8 +106,32 @@ adminService.getOrderFromId = (orderId) => {
     },
   });
 };
+
 adminService.getAllOrder = () => {
-  return prisma.order.findMany();
+  return prisma.order.findMany({
+    include: {
+      payment: {
+        select: {
+          status: true,
+          paymentPic: true,
+        },
+      },
+      shipment: {
+        select: {
+          status: true,
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          address: true,
+        },
+      },
+    },
+  });
 };
 
 adminService.getUserAddressFromOrder = (orderId) => {

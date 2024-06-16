@@ -5,8 +5,13 @@ const upload = require("../middlewares/upload");
 const { validateUpdatePic } = require("../middlewares/validateUpload");
 const adminRouter = express.Router();
 
-adminRouter.post("/product", authenticate, upload.single("productPic"),
-validateUpdatePic, adminController.createProduct);
+adminRouter.post(
+  "/product",
+  authenticate,
+  upload.single("productPic"),
+  validateUpdatePic,
+  adminController.createProduct
+);
 adminRouter.patch(
   "/product",
   authenticate,
@@ -33,12 +38,8 @@ adminRouter.get(
   authenticate,
   adminController.getOrderandAddressFromOrderId
 );
-adminRouter.get("/product", authenticate, adminController.getAllProduct);
-adminRouter.get(
-  "/product/:productId",
-  authenticate,
-  adminController.getOneProduct
-);
+adminRouter.get("/product", adminController.getAllProduct);
+adminRouter.get("/product/:productId", adminController.getOneProduct);
 adminRouter.get(
   "/product/:category",
   authenticate,

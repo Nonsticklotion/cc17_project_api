@@ -51,8 +51,8 @@ adminController.deleteCategory = async (req, res, next) => {
 
 adminController.createProduct = async (req, res, next) => {
   try {
-    const { bookName, author, price, stock, category } = req.body;
-    if (!bookName || !author || !price || !stock || !category) {
+    const { bookName, author, price,description, stock, category } = req.body;
+    if (!bookName || !author || !price|| !description || !stock || !category) {
       return res.status(400).json({ error: "All fields are required" });
     }
     const findBookNameAndAuthor = await adminService.findBookNameAndAuthor(
@@ -81,6 +81,7 @@ adminController.createProduct = async (req, res, next) => {
     const result = await adminService.createProduct(
       bookName,
       author,
+      description,
       +price,
       +stock,
       productPicUrl,

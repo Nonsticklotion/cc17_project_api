@@ -55,12 +55,19 @@ userService.getOrder = (userId) => {
       },
       payment: {
         select: {
+          status: true,
           paymentPic: true,
+        },
+      },
+      shipment: {
+        select: {
+          status: true,
         },
       },
     },
   });
 };
+
 
 userService.createOrder = (data) => {
   return prisma.order.create({ data });
@@ -77,6 +84,17 @@ userService.updatePayment = (paymentPic, paymentId) => {
 userService.deletePayment = (paymentId) => {
   return prisma.payment.delete({
     where: { id: paymentId },
+  });
+};
+
+userService.decreaseProductStock = (productId, amount) => {
+  return prisma.product.update({
+    where: { id: productId },
+    data: {
+      stock: {
+        decrement: amount,
+      },
+    },
   });
 };
 
@@ -125,8 +143,17 @@ userService.updatePaymentPicById = (paymentId, paymentPic) => {
 };
 ////////////////////Review///////////////////////////////
 
-userService.getAllReviewFromProductId = (productId) => {
-  return prisma.review.findMany({ where: { productId } });
+userService.getAllReviewFromProductId = async (productId) => {
+  return prisma.review.findMany({
+    where: { productId },
+    include: {
+      user: {
+        select: {
+          email: true,
+        },
+      },
+    },
+  });
 };
 userService.updateReview = (reviewId, reviewData) => {
   return prisma.review.update({
@@ -140,11 +167,21 @@ userService.addReview = (reviewData) => {
   });
 };
 
-userService.deleteReview = (userId, productId) => {
-  return prisma.review.delete({
+userService.deleteReview = async (userId, productId) => {
+  const review = await prisma.review.findFirst({
     where: {
       userId: userId,
       productId: productId,
+    },
+  });
+
+  if (!review) {
+    throw new Error("Review not found");
+  }
+
+  return prisma.review.delete({
+    where: {
+      id: review.id,
     },
   });
 };

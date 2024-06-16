@@ -77,8 +77,13 @@ userController.createOrder = async (req, res, next) => {
     const orderItems = orderItemsData.map((item) => ({
       ...item,
       orderId: newOrder.id,
+      discount : 0
     }));
     await userService.createOrderItems(orderItems);
+
+    for (let item of orderItems) {
+      await userService.decreaseProductStock(item.productId, item.amount);
+    }
 
     res.status(201).json({ success: true, data: newOrder });
   } catch (err) {
@@ -136,6 +141,10 @@ userController.createReview = async (req, res, next) => {
   try {
     const { id } = req.user;
     const { productId, ratingId, comment } = req.body;
+    console.log("id", id);
+    console.log("productId", productId);
+    console.log("ratingId", ratingId);
+    console.log("comment", comment);
     if (!productId || !ratingId || !comment) {
       createError({
         message: "please fill all field",
@@ -153,7 +162,7 @@ userController.createReview = async (req, res, next) => {
         statusCode: 400,
       });
     }
-    const data = { productId, ratingId, comment, userId: id };
+    const data = { productId: +productId, ratingId, comment, userId: id };
     const result = await userService.addReview(data);
     res.status(200).json({ message: "finish create review", data: result });
   } catch (err) {
@@ -165,6 +174,7 @@ userController.deleteReview = async (req, res, next) => {
   try {
     const { id } = req.user;
     const { productId } = req.params;
+    console.log(id, productId);
     if (!productId) {
       createError({ message: "need productId", statusCode: 400 });
     }

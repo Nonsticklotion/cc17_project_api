@@ -84,15 +84,16 @@ enum ShipmentStatus {
 }
 
 model Product {
-  id         Int      @id @default(autoincrement())
-  bookName   String
-  bookPic    String
-  author     String
-  price      Int
-  categoryId Int
-  stock      Int
-  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  id          Int      @id @default(autoincrement())
+  bookName    String
+  bookPic     String
+  author      String
+  description String
+  price       Int
+  categoryId  Int
+  stock       Int
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
 
   category   Category    @relation(fields: [categoryId], references: [id])
   reviews    Review[]
