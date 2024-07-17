@@ -21,6 +21,7 @@ userService.findUserById = (userId) => {
 userService.getUserInfo = (userId) => {
   return prisma.user.findUnique({ where: { id: userId } });
 };
+
 userService.updateUserInfo = (userInfo, userId) => {
   return prisma.user.update({
     where: { id: userId },

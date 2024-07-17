@@ -8,7 +8,12 @@ const notFoundMiddleware = require("./middlewares/not-found");
 const errorMiddleware = require("./middlewares/error");
 const app = express();
 
-app.use(cors());
+// app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:5174',
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

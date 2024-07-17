@@ -141,10 +141,6 @@ userController.createReview = async (req, res, next) => {
   try {
     const { id } = req.user;
     const { productId, ratingId, comment } = req.body;
-    console.log("id", id);
-    console.log("productId", productId);
-    console.log("ratingId", ratingId);
-    console.log("comment", comment);
     if (!productId || !ratingId || !comment) {
       createError({
         message: "please fill all field",
