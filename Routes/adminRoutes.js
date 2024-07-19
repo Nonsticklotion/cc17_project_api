@@ -42,7 +42,6 @@ adminRouter.get("/product", adminController.getAllProduct);
 adminRouter.get("/product/:productId", adminController.getOneProduct);
 adminRouter.get(
   "/product/:category",
-  authenticate,
   adminController.selectProductFromCategory
 );
 adminRouter.delete(
@@ -51,7 +50,7 @@ adminRouter.delete(
   adminController.deleteProduct
 );
 adminRouter.post("/category", authenticate, adminController.createCategory);
-adminRouter.get("/category",  adminController.getCategory);
+adminRouter.get("/category", adminController.getCategory);
 adminRouter.delete("/category", authenticate, adminController.deleteCategory);
 
 module.exports = adminRouter;
