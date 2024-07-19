@@ -27,6 +27,7 @@ model User {
 
   orders  Order[]
   reviews Review[]
+  @@map("user")
 }
 
 model Order {
@@ -43,6 +44,7 @@ model Order {
   shipment   Shipment    @relation(fields: [shipmentId], references: [id])
   payment    Payment     @relation(fields: [paymentId], references: [id])
   orderItems OrderItem[]
+  @@map("order")
 }
 
 model OrderItem {
@@ -57,6 +59,7 @@ model OrderItem {
 
   order   Order   @relation(fields: [orderId], references: [id])
   product Product @relation(fields: [productId], references: [id])
+  @@map("orderitem")
 }
 
 model Payment {
@@ -64,6 +67,7 @@ model Payment {
   status     PaymentStatus @default(PENDING)
   paymentPic String?
   orders     Order[]
+  @@map("payment")
 }
 
 enum PaymentStatus {
@@ -76,6 +80,7 @@ model Shipment {
   id     Int            @id @default(autoincrement())
   status ShipmentStatus @default(PREPARING)
   orders Order[]
+  @@map("shipment")
 }
 
 enum ShipmentStatus {
@@ -98,12 +103,14 @@ model Product {
   category   Category    @relation(fields: [categoryId], references: [id])
   reviews    Review[]
   orderItems OrderItem[]
+  @@map("product")
 }
 
 model Category {
   id       Int       @id @default(autoincrement())
   category String    @unique
   products Product[]
+  @@map("category")
 }
 
 model Review {
@@ -117,6 +124,7 @@ model Review {
 
   user    User    @relation(fields: [userId], references: [id])
   product Product @relation(fields: [productId], references: [id])
+  @@map("review")
 }
 
 enum RatingValue {
