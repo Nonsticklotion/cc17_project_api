@@ -51,7 +51,7 @@ adminRouter.delete(
   adminController.deleteProduct
 );
 adminRouter.post("/category", authenticate, adminController.createCategory);
-adminRouter.get("/category", authenticate, adminController.getCategory);
+adminRouter.get("/category",  adminController.getCategory);
 adminRouter.delete("/category", authenticate, adminController.deleteCategory);
 
 module.exports = adminRouter;
