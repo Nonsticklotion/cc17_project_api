@@ -10,7 +10,7 @@ const app = express();
 
 // app.use(cors());
 const corsOptions = {
-  origin: 'http://localhost:5174',
+  origin: 'https://cc17-project-client.onrender.com',
   credentials: true,
 };
 app.use(cors(corsOptions));
