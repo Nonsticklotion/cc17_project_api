@@ -22,7 +22,7 @@ userRouter.delete(
 );
 userRouter.get(
   "/review/:productId",
-  authenticate,
+
   userController.getReviewFromProductId
 );
 
@@ -34,9 +34,5 @@ userRouter.patch(
   userController.updatePaymentPic
 );
 
-userRouter.get(
-  "/product/:category",
-  authenticate,
-  userController.selectProductFromCategory
-);
+userRouter.get("/product/:category", userController.selectProductFromCategory);
 module.exports = userRouter;

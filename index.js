@@ -9,8 +9,12 @@ const errorMiddleware = require("./middlewares/error");
 const app = express();
 
 // app.use(cors());
+// const corsOptions = {
+//   origin: 'https://cc17-project-client.onrender.com',
+//   credentials: true,
+// };
 const corsOptions = {
-  origin: 'https://cc17-project-client.onrender.com',
+  origin: 'http://localhost:5173',
   credentials: true,
 };
 app.use(cors(corsOptions));
