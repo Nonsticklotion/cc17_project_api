@@ -34,10 +34,7 @@ userController.getMyOrder = async (req, res, next) => {
     const { id } = req.user;
     const orders = await userService.getOrder(id);
     if (!orders || orders.length === 0) {
-      createError({
-        message: "cant find your order or no your order in database",
-        statusCode: 400,
-      });
+      return res.status(200).json({ message: "You have no orders." });
     }
     res.status(200).json({ data: orders });
   } catch (err) {
@@ -77,7 +74,7 @@ userController.createOrder = async (req, res, next) => {
     const orderItems = orderItemsData.map((item) => ({
       ...item,
       orderId: newOrder.id,
-      discount : 0
+      discount: 0,
     }));
     await userService.createOrderItems(orderItems);
 
