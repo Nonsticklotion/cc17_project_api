@@ -39,6 +39,7 @@ adminRouter.get(
   adminController.getOrderandAddressFromOrderId
 );
 adminRouter.get("/product", adminController.getAllProduct);
+adminRouter.get("/homeproduct", adminController.getHomeProduct);
 adminRouter.get("/product/:productId", adminController.getOneProduct);
 adminRouter.get(
   "/product/:category",

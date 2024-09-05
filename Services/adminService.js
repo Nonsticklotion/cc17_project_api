@@ -60,6 +60,22 @@ adminService.getAllProduct = () => {
     },
   });
 };
+adminService.getHomeProduct = () => {
+  return prisma.product.findMany({
+    include: {
+      category: {
+        select: {
+          category: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc", // Sorts products by createdAt in descending order (newest first)
+    },
+    take: 4, // Fetches the 4 latest products
+  });
+};
+
 
 adminService.getProductFromCategoryId = (categoryId) => {
   return prisma.product.findMany({

@@ -147,6 +147,14 @@ adminController.getAllProduct = async (req, res, next) => {
     next(err);
   }
 };
+adminController.getHomeProduct = async (req, res, next) => {
+  try {
+    const result = await adminService.getHomeProduct();
+    res.status(200).json({ message: "get home product", data: result });
+  } catch (err) {
+    next(err);
+  }
+};
 adminController.selectProductFromCategory = async (req, res, next) => {
   try {
     const { category } = req.params;
